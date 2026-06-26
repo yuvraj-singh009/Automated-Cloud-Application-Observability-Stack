@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+get-pip.py
+
+# Terraform sensitive files
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+
+# AWS Keys - never push these
+*.pem
+*.key
+
+# Environment files
+.env

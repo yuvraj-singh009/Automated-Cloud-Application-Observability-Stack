@@ -1,0 +1,22 @@
+body{
+    background:#111;
+    color:white;
+    font-family:Arial;
+}
+
+.container{
+    width:80%;
+    margin:auto;
+}
+
+.card{
+    background:#222;
+    padding:20px;
+    margin-top:20px;
+    border-radius:10px;
+}
+
+.alert{
+    color:red;
+    font-weight:bold;
+}

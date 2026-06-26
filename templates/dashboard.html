@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>SOC Dashboard</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+<meta http-equiv="refresh" content="5">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>SOC Monitoring Dashboard</h1>
+
+<div class="card">
+
+<h2>System Metrics</h2>
+
+<p>CPU Usage : {{ cpu }}%</p>
+
+<p>Memory Usage : {{ memory }}%</p>
+
+</div>
+
+<div class="card">
+
+<h2>Security Events</h2>
+
+<ul>
+
+{% for event in events %}
+<li>{{ event }}</li>
+{% endfor %}
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>Alerts</h2>
+
+{% if alerts %}
+
+<ul>
+
+{% for alert in alerts %}
+<li class="alert">{{ alert }}</li>
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>System Normal</p>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</body>
+</html>
