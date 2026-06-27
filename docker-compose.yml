@@ -1,0 +1,40 @@
+version: "3.8"
+
+networks:
+  monitoring:
+    driver: bridge
+
+services:
+
+  soc-app:
+    build: .                        # builds from your Dockerfile
+    container_name: health-monitor
+    ports:
+      - "80:8000"
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+    restart: unless-stopped
+    depends_on:
+      - soc-app                     # waits for app to start first
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    depends_on:
+      - prometheus                  # waits for prometheus to start first

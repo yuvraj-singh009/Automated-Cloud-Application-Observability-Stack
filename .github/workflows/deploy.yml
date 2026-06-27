@@ -1,13 +1,13 @@
-name: Deploy to EC2          # Name shown in GitHub Actions UI
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - main                 # Only triggers when you push to 'main' branch
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest   # GitHub spins up a fresh Ubuntu VM to run this
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -17,29 +17,22 @@ jobs:
 
       # Step 2: SSH into EC2 and run deployment commands
       - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1.0.0   # A trusted community action for SSH
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.EC2_HOST }}       # Your EC2 IP from secrets
-          username: ${{ secrets.EC2_USER }}   # 'ubuntu' from secrets
-          key: ${{ secrets.EC2_SSH_KEY }}     # Your .pem content from secrets
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Everything below runs ON your EC2 instance
-
-            # Go to your app directory (create this on EC2 if it doesn't exist)
             cd /home/ubuntu/app
 
-            # Pull the latest code from GitHub
+            # Pull latest code from GitHub
             git pull origin main
 
-            # Stop and remove the old running container (ignore error if none exists)
-            docker stop health-monitor || true
-            docker rm health-monitor || true
+            # Install docker compose plugin if not already installed
+            docker compose version || sudo yum install -y docker-compose-plugin
 
-            # Rebuild the Docker image from your updated code
-            docker build -t health-monitor .
+            # Stop all running containers defined in compose file
+            docker compose down
 
-            # Start a new container
-            # -d = run in background (detached)
-            # -p 80:8000 = map EC2 port 80 to container port 8000
-            # --name = give it a name so we can reference it later
-            docker run -d -p 80:8000 --name health-monitor health-monitor
+            # Rebuild app image and start all 3 containers (app + prometheus + grafana)
+            docker compose up -d --build
