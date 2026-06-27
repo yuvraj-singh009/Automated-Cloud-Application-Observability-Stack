@@ -1,0 +1,45 @@
+name: Deploy to EC2          # Name shown in GitHub Actions UI
+
+on:
+  push:
+    branches:
+      - main                 # Only triggers when you push to 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest   # GitHub spins up a fresh Ubuntu VM to run this
+
+    steps:
+
+      # Step 1: Check out your repo code onto GitHub's runner VM
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: SSH into EC2 and run deployment commands
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0   # A trusted community action for SSH
+        with:
+          host: ${{ secrets.EC2_HOST }}       # Your EC2 IP from secrets
+          username: ${{ secrets.EC2_USER }}   # 'ubuntu' from secrets
+          key: ${{ secrets.EC2_SSH_KEY }}     # Your .pem content from secrets
+          script: |
+            # Everything below runs ON your EC2 instance
+
+            # Go to your app directory (create this on EC2 if it doesn't exist)
+            cd /home/ubuntu/app
+
+            # Pull the latest code from GitHub
+            git pull origin main
+
+            # Stop and remove the old running container (ignore error if none exists)
+            docker stop health-monitor || true
+            docker rm health-monitor || true
+
+            # Rebuild the Docker image from your updated code
+            docker build -t health-monitor .
+
+            # Start a new container
+            # -d = run in background (detached)
+            # -p 80:8000 = map EC2 port 80 to container port 8000
+            # --name = give it a name so we can reference it later
+            docker run -d -p 80:8000 --name health-monitor health-monitor
