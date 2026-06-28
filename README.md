@@ -43,25 +43,25 @@ GitHub Actions (CI/CD)  ──── SSH ────▶  AWS EC2 Instance
 ## 📸 Screenshots
 
 ### AWS EC2 Instance Running
-![AWS EC2](screenshots\aws-ec2-console.png)
+![AWS EC2](screenshots/aws-ec2-console.png)
 
 ### Terraform Output — Public IP Created
-![Terraform Output](screenshots\Terraform-output.png)
+![Terraform Output](screenshots/Terraform-output.png)
 
 ### Cloning Repo to EC2
-![Cloning Repo](screenshots/03-cloning-repo-to-ec2.png)
+![Cloning Repo](screenshots/cloning-repo-to-ec2.png)
 
 ### Docker Image Build
-![Docker Build](screenshots\Creating-docker-image.png)
+![Docker Build](screenshots/Creating-docker-image.png)
 
 ### Application Live on EC2
-![App Live](screenshots\App-live-on-ec2.png)
+![App Live](screenshots/App-live-on-ec2.png)
 
 ### App /metrics Endpoint
-![Metrics](screenshots\App-metrics-page.png)
+![Metrics](screenshots/App-metrics-page.png)
 
 ### Prometheus Targets — All UP
-![Prometheus](screenshots\prometheus-targets.png)
+![Prometheus](screenshots/prometheus-targets.png)
 
 ### Prometheus Query
 ![Prometheus Query](screenshots/prometheus-query.png)
@@ -70,16 +70,16 @@ GitHub Actions (CI/CD)  ──── SSH ────▶  AWS EC2 Instance
 ![Grafana](screenshots/grafana-dashboard.png)
 
 ### Chaos Engineering — Stress Test Running on EC2
-![Stress Test](screenshots\Chaos-Stress-running-on-ec2.png)
+![Stress Test](screenshots/Chaos-Stress-running-on-ec2.png)
 
 ### Chaos Engineering — CPU Spike on Grafana
-![CPU Spike](screenshots\chaos-cpu-spike-grafana.png)
+![CPU Spike](screenshots/chaos-cpu-spike-grafana.png)
 
 ### GitHub Actions — Pipeline Success
 ![CI/CD](screenshots/github-actions-success.png)
 
 ### Final File Structure
-![File Structure](screenshots\File-Structure-final.png)
+![File Structure](screenshots/File-Structure-final.png)
 
 ---
 
