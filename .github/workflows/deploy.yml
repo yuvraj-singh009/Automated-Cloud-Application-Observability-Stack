@@ -11,11 +11,9 @@ jobs:
 
     steps:
 
-      # Step 1: Check out your repo code onto GitHub's runner VM
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: SSH into EC2 and run deployment commands
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -25,14 +23,17 @@ jobs:
           script: |
             cd /home/ubuntu/app
 
-            # Pull latest code from GitHub
+            # Pull latest code
             git pull origin main
 
-            # Install docker compose plugin if not already installed
-            docker compose version || sudo yum install -y docker-compose-plugin
+            # Install docker-compose (standalone) if not present
+            if ! command -v docker-compose &> /dev/null; then
+              sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            fi
 
-            # Stop all running containers defined in compose file
-            docker compose down
+            # Stop old containers
+            docker-compose down
 
-            # Rebuild app image and start all 3 containers (app + prometheus + grafana)
-            docker compose up -d --build
+            # Rebuild and start all containers
+            docker-compose up -d --build
